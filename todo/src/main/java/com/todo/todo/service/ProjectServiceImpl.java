@@ -1,6 +1,7 @@
 package com.todo.todo.service;
 
 import com.todo.todo.entity.*;
+import com.todo.todo.exception.ProjectNotFoundException;
 import com.todo.todo.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -24,7 +25,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectResponse get(Long id) {
-        Project task = projectRepository.findById(id).get();
+        Project task = projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
         ProjectResponse response = mapToResponse(task);
         return response;
     }

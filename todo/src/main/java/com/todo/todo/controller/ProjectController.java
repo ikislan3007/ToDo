@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -15,13 +16,13 @@ public class ProjectController {
     public ProjectService projectService;
 
     @PostMapping
-    public ResponseEntity<ProjectResponse> create(@RequestBody ProjectRequest projectRequest) {
+    public ResponseEntity<ProjectResponse> create(@Valid @RequestBody ProjectRequest projectRequest) {
         ProjectResponse response = projectService.save(projectRequest);
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProjectResponse> update(@RequestBody ProjectRequest projectRequest, @PathVariable Long id) {
+    public ResponseEntity<ProjectResponse> update(@Valid @RequestBody ProjectRequest projectRequest, @PathVariable Long id) {
         ProjectResponse response = projectService.update(projectRequest, id);
         return ResponseEntity.ok(response);
     }

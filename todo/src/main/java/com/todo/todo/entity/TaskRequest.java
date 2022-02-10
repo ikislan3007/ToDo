@@ -9,7 +9,10 @@ public class TaskRequest {
 
     @Min(3)
     private String name;
+
+    @Min(3)
     private String description;
+
     private boolean done;
 
     private Long projectId;

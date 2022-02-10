@@ -3,11 +3,15 @@ package com.todo.todo.controller;
 
 import com.todo.todo.entity.TaskRequest;
 import com.todo.todo.entity.TaskResponse;
+import com.todo.todo.exception.ProjectNotFoundException;
 import com.todo.todo.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -16,13 +20,13 @@ public class TaskController {
     public TaskService taskService;
 
     @PostMapping
-    public ResponseEntity<TaskResponse> create(@RequestBody TaskRequest taskRequest){
+    public ResponseEntity<TaskResponse> create(@Valid @RequestBody TaskRequest taskRequest){
         TaskResponse responce=taskService.save(taskRequest);
         return ResponseEntity.ok(responce);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TaskResponse> update(@RequestBody TaskRequest taskRequest, @PathVariable Long id){
+    public ResponseEntity<TaskResponse> update(@Valid @RequestBody TaskRequest taskRequest, @PathVariable Long id){
         TaskResponse responce = taskService.update(taskRequest, id);
         return ResponseEntity.ok(responce);
     }
@@ -35,8 +39,12 @@ public class TaskController {
 
     @GetMapping("/{id}")
     public ResponseEntity<TaskResponse> get(@PathVariable Long id) {
-        TaskResponse response = taskService.get(id);
-        return ResponseEntity.ok(response);
+        try {
+            TaskResponse response = taskService.get(id);
+            return ResponseEntity.ok(response);
+        } catch(ProjectNotFoundException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+        }
     }
 
     @GetMapping

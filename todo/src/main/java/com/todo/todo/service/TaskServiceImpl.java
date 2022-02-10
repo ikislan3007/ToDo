@@ -4,6 +4,8 @@ import com.todo.todo.entity.Project;
 import com.todo.todo.entity.Task;
 import com.todo.todo.entity.TaskRequest;
 import com.todo.todo.entity.TaskResponse;
+import com.todo.todo.exception.ProjectNotFoundException;
+import com.todo.todo.exception.TaskNotFoundException;
 import com.todo.todo.repository.ProjectRepository;
 import com.todo.todo.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +46,7 @@ public class TaskServiceImpl implements TaskService {
         result.setName(task.getName());
         result.setDescription(task.getDescription());
         result.setDone(task.isDone());
-        Project project = projectRepository.findById(task.getProjectId()).get();
+        Project project = projectRepository.findById(task.getProjectId()).orElseThrow(() -> new ProjectNotFoundException(task.getProjectId()));
         result.setProject(project);
 
         return result;
@@ -63,7 +65,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskResponse get(Long id) {
-        Task task = taskRepo.findById(id).get();
+        Task task = taskRepo.findById(id).orElseThrow(() -> new TaskNotFoundException(id));
         TaskResponse response = mapToResponse(task);
         return response;
     }
