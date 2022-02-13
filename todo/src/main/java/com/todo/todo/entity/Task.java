@@ -2,6 +2,7 @@ package com.todo.todo.entity;
 
 
 import com.todo.todo.BaseEntity;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.Entity;
@@ -12,9 +13,8 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
+@Data
 public class Task extends BaseEntity implements Serializable {
-
-
 
     @NotNull(message = "Name cannot be null")
     @Size(min = 3, message
@@ -49,6 +49,14 @@ public class Task extends BaseEntity implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    public Project getProject() {
+        return this.project;
     }
 
     public boolean isDone() {

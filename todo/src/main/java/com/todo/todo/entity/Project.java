@@ -8,7 +8,6 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
-
 public class Project extends BaseEntity implements Serializable {
 
 
@@ -21,4 +20,10 @@ public class Project extends BaseEntity implements Serializable {
   /*  @OneToMany(mappedBy="project")
     private Set<Task> tasks;*/
 
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getName() {
+        return name;
+    }
 }

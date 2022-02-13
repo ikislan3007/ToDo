@@ -21,8 +21,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskResponseDTO save(TaskCreateDTO task) {
-
-        Task newTask = taskRepo.save(taskMapper.map(task));
+        Task taskForSave = taskMapper.map(task);
+        taskForSave.setProject(projectRepository.findById(task.projectId()).get());
+        Task newTask = taskRepo.save(taskForSave);
         return taskMapper.map(newTask);
     }
 
@@ -33,12 +34,6 @@ public class TaskServiceImpl implements TaskService {
         this.taskRepo = taskRepo;
     }
 
-    @Autowired
-    public void setProjectRepo(ProjectRepository projectRepository) {
-        this.projectRepository = projectRepository;
-    }
-
-
     @Override
     public TaskResponseDTO get(Long id) {
         return taskMapper.map(taskRepo.findById(id).orElseThrow(() -> new TaskNotFoundException(id)));
@@ -47,11 +42,10 @@ public class TaskServiceImpl implements TaskService {
 
    @Override
     public TaskResponseDTO update(TaskUpdateDTO task) {
-        Task dbTask = taskRepo.findById(task.getId()).orElseThrow(() -> new TaskNotFoundException(task.getId()));
-
+        Task dbTask = taskRepo.findById(task.id()).orElseThrow(() -> new TaskNotFoundException(task.id()));
         taskMapper.map(task, dbTask);
-
-        return taskMapper.map(taskRepo.save(dbTask));
+        TaskResponseDTO updatedTask = taskMapper.map(taskRepo.save(dbTask));
+        return updatedTask;
     }
 
     @Override
@@ -62,6 +56,16 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Page<TaskResponseDTO> getAll(Pageable pageable) {
         return taskRepo.findAll(pageable).map(taskMapper::map);
+    }
+
+    @Autowired
+    public void setTaskMapper(TaskMapper taskMapper) {
+        this.taskMapper = taskMapper;
+    }
+
+    @Autowired
+    public void setProjectRepository(ProjectRepository projectRepository) {
+        this.projectRepository = projectRepository;
     }
 
 }

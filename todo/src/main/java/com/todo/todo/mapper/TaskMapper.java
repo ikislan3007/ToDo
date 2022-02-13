@@ -1,14 +1,10 @@
 package com.todo.todo.mapper;
 
 
+import com.todo.todo.entity.Project;
 import com.todo.todo.entity.Task;
-import com.todo.todo.models.TaskCreateDTO;
-import com.todo.todo.models.TaskResponseDTO;
-import com.todo.todo.models.TaskUpdateDTO;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import com.todo.todo.models.*;
+import org.mapstruct.*;
 
 @Mapper(componentModel ="spring")
 public interface TaskMapper {
@@ -19,5 +15,7 @@ public interface TaskMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void map(TaskUpdateDTO taskUpdateDTO, @MappingTarget Task task);
+
+    ProjectResponseDTO map(Project project);
 }
 

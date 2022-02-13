@@ -20,7 +20,8 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectResponseDTO save(ProjectCreateDTO project) {
-        Project newProject=projectRepository.save(projectMapper.map(project));
+        Project projectForSave = projectMapper.map(project);
+        Project newProject = projectRepository.save(projectForSave);
         return projectMapper.map(newProject);
     }
 
@@ -36,7 +37,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectResponseDTO update(ProjectUpdateDTO project) {
-        Project dbProject = projectRepository.findById(project.getId()).orElseThrow(() -> new ProjectNotFoundException(project.getId()));
+        Project dbProject = projectRepository.findById(project.id()).orElseThrow(() -> new ProjectNotFoundException(project.id()));
 
         projectMapper.map(project, dbProject);
 
@@ -52,12 +53,14 @@ public class ProjectServiceImpl implements ProjectService {
 
 
     @Autowired
-    public void setTaskRepo(ProjectRepository taskRepo) {
-        this.projectRepository = projectRepository;
+    public void setProjectRepository(
+            ProjectRepository taskRepo) {
+        this.projectRepository = taskRepo;
     }
 
     @Autowired
-    public void setTaskMapper(ProjectMapper projectMapper) {
+    public void setProjectMapper(ProjectMapper projectMapper) {
+
         this.projectMapper = projectMapper;
     }
 }
