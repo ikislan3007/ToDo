@@ -1,25 +1,20 @@
 package com.todo.todo.entity;
 
 
-import lombok.Builder;
-import lombok.Data;
-import org.hibernate.validator.constraints.UniqueElements;
-import org.springframework.beans.factory.annotation.Required;
+import com.todo.todo.BaseEntity;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.persistence.*;
-import javax.validation.constraints.Min;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 @Entity
-@Data
-public class Task {
+public class Task extends BaseEntity implements Serializable {
 
-    @Id
-    @GeneratedValue
-//    @UniqueElements wtf
-    private Long id;
+
 
     @NotNull(message = "Name cannot be null")
     @Size(min = 3, message
@@ -38,13 +33,7 @@ public class Task {
     @Value("${some.key:false}")
     private boolean done;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

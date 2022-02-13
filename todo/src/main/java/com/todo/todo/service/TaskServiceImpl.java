@@ -1,56 +1,32 @@
 package com.todo.todo.service;
 
-import com.todo.todo.entity.Project;
 import com.todo.todo.entity.Task;
-import com.todo.todo.entity.TaskRequest;
-import com.todo.todo.entity.TaskResponse;
-import com.todo.todo.exception.ProjectNotFoundException;
 import com.todo.todo.exception.TaskNotFoundException;
+import com.todo.todo.mapper.TaskMapper;
+import com.todo.todo.models.TaskCreateDTO;
+import com.todo.todo.models.TaskResponseDTO;
+import com.todo.todo.models.TaskUpdateDTO;
 import com.todo.todo.repository.ProjectRepository;
 import com.todo.todo.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class TaskServiceImpl implements TaskService {
     private TaskRepository taskRepo;
+    private TaskMapper taskMapper;
     private ProjectRepository projectRepository;
 
     @Override
-    public TaskResponse save(TaskRequest task) {
-        Task saveTask = mapToSave(task);
-        Task savedTask = taskRepo.save(saveTask);
-        TaskResponse response = mapToResponse(savedTask);
-        return response;
+    public TaskResponseDTO save(TaskCreateDTO task) {
+
+        Task newTask = taskRepo.save(taskMapper.map(task));
+        return taskMapper.map(newTask);
     }
 
 
-    //mappers
-    private TaskResponse mapToResponse(Task savedTask) {
-        TaskResponse result = new TaskResponse();
-        result.setId(savedTask.getId());
-        result.setName(savedTask.getName());
-        result.setDescription(savedTask.getDescription());
-        result.setDone(savedTask.isDone());
-        result.setProjectId(savedTask.getProject().getId());
-
-        return result;
-    }
-
-    private Task mapToSave(TaskRequest task) {
-        Task result = new Task();
-        result.setName(task.getName());
-        result.setDescription(task.getDescription());
-        result.setDone(task.isDone());
-        Project project = projectRepository.findById(task.getProjectId()).orElseThrow(() -> new ProjectNotFoundException(task.getProjectId()));
-        result.setProject(project);
-
-        return result;
-    }
 
     @Autowired
     public void setTaskRepo(TaskRepository taskRepo) {
@@ -64,19 +40,18 @@ public class TaskServiceImpl implements TaskService {
 
 
     @Override
-    public TaskResponse get(Long id) {
-        Task task = taskRepo.findById(id).orElseThrow(() -> new TaskNotFoundException(id));
-        TaskResponse response = mapToResponse(task);
-        return response;
+    public TaskResponseDTO get(Long id) {
+        return taskMapper.map(taskRepo.findById(id).orElseThrow(() -> new TaskNotFoundException(id)));
     }
 
-    @Override
-    public TaskResponse update(TaskRequest taskRequest, Long id) {
-        Task updateTask = mapToSave(taskRequest);
-        updateTask.setId(id);
-        Task savedTask = taskRepo.save(updateTask);
-        TaskResponse response = mapToResponse(savedTask);
-        return response;
+
+   @Override
+    public TaskResponseDTO update(TaskUpdateDTO task) {
+        Task dbTask = taskRepo.findById(task.getId()).orElseThrow(() -> new TaskNotFoundException(task.getId()));
+
+        taskMapper.map(task, dbTask);
+
+        return taskMapper.map(taskRepo.save(dbTask));
     }
 
     @Override
@@ -85,12 +60,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskResponse> getAll(int page, int pageSize) {
-        if (page != 0 && pageSize != 0) {
-            Pageable pageAndElements = PageRequest.of(page, pageSize);
-            return taskRepo.findAll(pageAndElements).stream().map((Task task) ->  mapToResponse(task)).toList();
-        }
-        return taskRepo.findAll().stream().map((Task task) ->  mapToResponse(task)).toList();
-
+    public Page<TaskResponseDTO> getAll(Pageable pageable) {
+        return taskRepo.findAll(pageable).map(taskMapper::map);
     }
+
 }

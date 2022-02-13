@@ -1,17 +1,20 @@
 package com.todo.todo.service;
 
-import com.todo.todo.entity.TaskRequest;
-import com.todo.todo.entity.TaskResponse;
-
-import java.util.List;
+import com.todo.todo.models.TaskCreateDTO;
+import com.todo.todo.models.TaskResponseDTO;
+import com.todo.todo.models.TaskUpdateDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface TaskService {
-    TaskResponse save(TaskRequest task);
-    TaskResponse get(Long id);
 
-    TaskResponse update(TaskRequest taskRequest, Long id);
+    TaskResponseDTO save(TaskCreateDTO task);
 
-    void delete(Long id);
+    TaskResponseDTO get(Long id);
 
-    List<TaskResponse> getAll(int page, int pageSize);
+    Page<TaskResponseDTO> getAll(Pageable pageable);
+
+   TaskResponseDTO update(TaskUpdateDTO task);
+
+    public void delete(Long id);
 }

@@ -1,73 +1,63 @@
 package com.todo.todo.service;
 
-import com.todo.todo.entity.*;
+import com.todo.todo.entity.Project;
 import com.todo.todo.exception.ProjectNotFoundException;
+import com.todo.todo.mapper.ProjectMapper;
+import com.todo.todo.models.ProjectCreateDTO;
+import com.todo.todo.models.ProjectResponseDTO;
+import com.todo.todo.models.ProjectUpdateDTO;
 import com.todo.todo.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
 
     private ProjectRepository projectRepository;
+    private ProjectMapper projectMapper;
 
     @Override
-    public ProjectResponse save(ProjectRequest projectRequest) {
-        Project project = mapToSave(projectRequest);
-        Project savedProject = projectRepository.save(project);
-        ProjectResponse response = mapToResponse(savedProject);
-        return response;
+    public ProjectResponseDTO save(ProjectCreateDTO project) {
+        Project newProject=projectRepository.save(projectMapper.map(project));
+        return projectMapper.map(newProject);
     }
 
     @Override
-    public ProjectResponse get(Long id) {
-        Project task = projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
-        ProjectResponse response = mapToResponse(task);
-        return response;
+    public ProjectResponseDTO get(Long id) {
+        return  projectMapper.map(projectRepository.findById(id).orElseThrow(()->new ProjectNotFoundException(id)));
     }
 
     @Override
-    public ProjectResponse update(ProjectRequest projectRequest, Long id) {
-        Project project = mapToSave(projectRequest);
-        project.setId(id);
-        Project savedProject = projectRepository.save(project);
-        ProjectResponse response = mapToResponse(savedProject);
-        return response;
+    public Page<ProjectResponseDTO> getAll(Pageable pageable) {
+        return projectRepository.findAll(pageable).map(projectMapper::map);
+    }
+
+    @Override
+    public ProjectResponseDTO update(ProjectUpdateDTO project) {
+        Project dbProject = projectRepository.findById(project.getId()).orElseThrow(() -> new ProjectNotFoundException(project.getId()));
+
+        projectMapper.map(project, dbProject);
+
+        return projectMapper.map(projectRepository.save(dbProject));
     }
 
     @Override
     public void delete(Long id) {
-        projectRepository.deleteById(id);
+
+            projectRepository.deleteById(id);
+
     }
 
+
     @Autowired
-    public void setProjectRepo(ProjectRepository projectRepository) {
+    public void setTaskRepo(ProjectRepository taskRepo) {
         this.projectRepository = projectRepository;
     }
 
-    private Project mapToSave(ProjectRequest projectRequest) {
-        Project result = new Project();
-        result.setName(projectRequest.getName());
-        return result;
-    }
-
-    private ProjectResponse mapToResponse(Project savedProject) {
-        ProjectResponse result = new ProjectResponse();
-        result.setId(savedProject.getId());
-        result.setName(savedProject.getName());
-        return result;
-    }
-
-    @Override
-    public List<ProjectResponse> getAll(int page, int pageSize) {
-        if (page != 0 && pageSize != 0) {
-            Pageable pageAndElements = PageRequest.of(page, pageSize);
-            return projectRepository.findAll(pageAndElements).stream().map((Project project) ->  mapToResponse(project)).toList();
-        }
-        return projectRepository.findAll().stream().map((Project project) ->  mapToResponse(project)).toList();
+    @Autowired
+    public void setTaskMapper(ProjectMapper projectMapper) {
+        this.projectMapper = projectMapper;
     }
 }
