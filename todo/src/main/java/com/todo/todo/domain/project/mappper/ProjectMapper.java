@@ -9,13 +9,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(componentModel ="spring")
+@Mapper(componentModel = "spring")
 public interface ProjectMapper {
-
     Project map(ProjectCreateDTO projectCreateDTO);
-
     ProjectResponseDTO map(Project project);
-
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void map(ProjectUpdateDTO projectUpdateDTO, @MappingTarget Project project);
 }

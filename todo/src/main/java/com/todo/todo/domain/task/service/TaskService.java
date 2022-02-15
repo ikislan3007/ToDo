@@ -1,4 +1,4 @@
-package com.todo.todo.domain.task.servise;
+package com.todo.todo.domain.task.service;
 
 import com.todo.todo.domain.task.models.TaskCreateDTO;
 import com.todo.todo.domain.task.models.TaskResponseDTO;
@@ -14,7 +14,7 @@ public interface TaskService {
 
     Page<TaskResponseDTO> getAll(Pageable pageable);
 
-   TaskResponseDTO update(TaskUpdateDTO task);
+    TaskResponseDTO update(TaskUpdateDTO task);
 
     public void delete(Long id);
 }

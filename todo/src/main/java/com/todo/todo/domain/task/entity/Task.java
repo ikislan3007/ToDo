@@ -1,9 +1,7 @@
 package com.todo.todo.domain.task.entity;
 
-
 import com.todo.todo.domain.BaseEntity;
 import com.todo.todo.domain.project.entity.Project;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.Entity;
@@ -14,7 +12,6 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
-@Data
 public class Task extends BaseEntity implements Serializable {
 
     @NotNull(message = "Name cannot be null")
@@ -33,6 +30,7 @@ public class Task extends BaseEntity implements Serializable {
 
     @Value("${some.key:false}")
     private boolean done;
+
 
 
 
@@ -67,4 +65,7 @@ public class Task extends BaseEntity implements Serializable {
     public void setDone(boolean done) {
         this.done = done;
     }
+
+
+
 }

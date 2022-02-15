@@ -1,4 +1,4 @@
-package com.todo.todo.domain.project.servise;
+package com.todo.todo.domain.project.service;
 
 import com.todo.todo.domain.project.entity.Project;
 import com.todo.todo.domain.project.mappper.ProjectMapper;
@@ -27,7 +27,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectResponseDTO get(Long id) {
-        return  projectMapper.map(projectRepository.findById(id).orElseThrow(()->new ProjectNotFoundException(id)));
+        return projectMapper.map(projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id)));
     }
 
     @Override
@@ -46,9 +46,11 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public void delete(Long id) {
-
+        if (projectRepository.existsById(id)) {
             projectRepository.deleteById(id);
-
+        } else {
+            throw new ProjectNotFoundException(id);
+        }
     }
 
 

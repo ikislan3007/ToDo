@@ -3,7 +3,7 @@ package com.todo.todo.domain.project.controller;
 import com.todo.todo.domain.project.models.ProjectCreateDTO;
 import com.todo.todo.domain.project.models.ProjectResponseDTO;
 import com.todo.todo.domain.project.models.ProjectUpdateDTO;
-import com.todo.todo.domain.project.servise.ProjectService;
+import com.todo.todo.domain.project.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,8 +36,10 @@ public class ProjectController {
     public ResponseEntity<ProjectResponseDTO> update(@Valid @RequestBody ProjectUpdateDTO project) {
         return ResponseEntity.ok(projectService.update(project));
     }
+
     @DeleteMapping("/{id}")
-    public void  delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
+
         projectService.delete(id);
     }
 
@@ -46,8 +48,6 @@ public class ProjectController {
     public void setTaskService(ProjectService projectService) {
         this.projectService = projectService;
     }
-
-
 
 
 }

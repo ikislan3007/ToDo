@@ -3,7 +3,7 @@ package com.todo.todo.domain.task.controller;
 import com.todo.todo.domain.task.models.TaskCreateDTO;
 import com.todo.todo.domain.task.models.TaskResponseDTO;
 import com.todo.todo.domain.task.models.TaskUpdateDTO;
-import com.todo.todo.domain.task.servise.TaskService;
+import com.todo.todo.domain.task.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,8 +32,9 @@ public class TaskController {
     public ResponseEntity<Page<TaskResponseDTO>> get(Pageable pageable) {
         return ResponseEntity.ok(taskService.getAll(pageable));
     }
+
     @DeleteMapping("/{id}")
-    public void  delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         taskService.delete(id);
     }
 
@@ -46,8 +47,6 @@ public class TaskController {
     public void setTaskService(TaskService taskService) {
         this.taskService = taskService;
     }
-
-
 
 
 }

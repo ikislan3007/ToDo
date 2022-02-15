@@ -1,4 +1,4 @@
-package com.todo.todo.domain.project.servise;
+package com.todo.todo.domain.project.service;
 
 import com.todo.todo.domain.project.models.ProjectCreateDTO;
 import com.todo.todo.domain.project.models.ProjectResponseDTO;
@@ -15,5 +15,6 @@ public interface ProjectService {
     Page<ProjectResponseDTO> getAll(Pageable pageable);
 
     ProjectResponseDTO update(ProjectUpdateDTO project);
-    public void delete(Long id);
+
+    void delete(Long id);
 }
