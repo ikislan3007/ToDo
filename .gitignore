@@ -92,6 +92,7 @@
 /.idea/misc.xml
 /.idea/modules.xml
 /.idea/workspace.xml
-
 /.idea/*/*.xml
-/.idea/*/*.pb
+/.idea/*/*.xml
+/.idea/*.xml
+/.idea/*.pb
