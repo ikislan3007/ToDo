@@ -42,7 +42,6 @@ public class TaskController {
     public ResponseEntity<TaskResponseDTO> update(@Valid @RequestBody TaskUpdateDTO task) {
         return ResponseEntity.ok(taskService.update(task));
     }
-
     @Autowired
     public void setTaskService(TaskService taskService) {
         this.taskService = taskService;

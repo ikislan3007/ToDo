@@ -42,10 +42,8 @@ public class ProjectController {
 
         projectService.delete(id);
     }
-
-
     @Autowired
-    public void setTaskService(ProjectService projectService) {
+    public void setProjectService(ProjectService projectService) {
         this.projectService = projectService;
     }
 
