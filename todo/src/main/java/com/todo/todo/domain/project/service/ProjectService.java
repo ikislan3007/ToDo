@@ -14,7 +14,7 @@ public interface ProjectService {
 
     Page<ProjectResponseDTO> getAll(Pageable pageable);
 
-    ProjectResponseDTO update(ProjectUpdateDTO project);
+    ProjectResponseDTO update(ProjectUpdateDTO project,Long id);
 
     void delete(Long id);
 }

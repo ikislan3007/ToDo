@@ -6,6 +6,7 @@ import com.todo.todo.domain.project.models.ProjectCreateDTO;
 import com.todo.todo.domain.project.models.ProjectResponseDTO;
 import com.todo.todo.domain.project.models.ProjectUpdateDTO;
 import com.todo.todo.domain.project.repository.ProjectRepository;
+import com.todo.todo.domain.task.repository.TaskRepository;
 import com.todo.todo.infrastructure.exceptions.custom.ProjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,9 +15,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
-
     private ProjectRepository projectRepository;
     private ProjectMapper projectMapper;
+    private TaskRepository taskRepo;
 
     @Override
     public ProjectResponseDTO save(ProjectCreateDTO project) {
@@ -27,6 +28,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectResponseDTO get(Long id) {
+
         return projectMapper.map(projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id)));
     }
 
@@ -36,8 +38,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectResponseDTO update(ProjectUpdateDTO project) {
-        Project dbProject = projectRepository.findById(project.id()).orElseThrow(() -> new ProjectNotFoundException(project.id()));
+    public ProjectResponseDTO update(ProjectUpdateDTO project,Long id) {
+        Project dbProject = projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
 
         projectMapper.map(project, dbProject);
 
@@ -52,7 +54,6 @@ public class ProjectServiceImpl implements ProjectService {
             throw new ProjectNotFoundException(id);
         }
     }
-
 
     @Autowired
     public void setProjectRepository(

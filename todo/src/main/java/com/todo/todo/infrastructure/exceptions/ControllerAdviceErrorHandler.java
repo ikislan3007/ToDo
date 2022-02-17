@@ -1,5 +1,4 @@
 package com.todo.todo.infrastructure.exceptions;
-
 import com.todo.todo.infrastructure.exceptions.custom.ProjectNotFoundException;
 import com.todo.todo.infrastructure.exceptions.custom.TaskNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;

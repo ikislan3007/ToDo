@@ -1,7 +1,5 @@
 package com.todo.todo.domain.task.models;
-
 import org.hibernate.validator.constraints.Length;
-
 import javax.validation.constraints.NotNull;
 
 public record TaskCreateDTO(

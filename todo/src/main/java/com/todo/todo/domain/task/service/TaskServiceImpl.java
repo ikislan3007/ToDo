@@ -39,8 +39,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskResponseDTO update(TaskUpdateDTO task) {
-        Task dbTask = taskRepo.findById(task.id()).orElseThrow(() -> new TaskNotFoundException(task.id()));
+    public TaskResponseDTO update(TaskUpdateDTO task,Long id) {
+        Task dbTask = taskRepo.findById(id).orElseThrow(() -> new TaskNotFoundException(id));
         taskMapper.map(task, dbTask);
         TaskResponseDTO updatedTask = taskMapper.map(taskRepo.save(dbTask));
         return updatedTask;

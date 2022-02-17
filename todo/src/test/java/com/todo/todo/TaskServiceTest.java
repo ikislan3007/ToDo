@@ -12,21 +12,14 @@ import com.todo.todo.domain.task.service.TaskService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class TaskServiceTest {
     @Autowired
@@ -69,7 +62,6 @@ public class TaskServiceTest {
     @DisplayName("Test update task")
     void testUpdate() {
         TaskUpdateDTO dto = new TaskUpdateDTO(
-                Long.valueOf(1),
                 "task",
                 "descriptionddqwd",
                 Long.valueOf(1),
@@ -81,9 +73,9 @@ public class TaskServiceTest {
 
         doReturn(task).when(taskRepository).save(any());
 
-        TaskResponseDTO taskResponseDTO = taskService.update(dto);
+        TaskResponseDTO taskResponseDTO = taskService.update(dto, Long.valueOf(72));
 
-        assertEquals(taskResponseDTO.id(), dto.id());
+        assertEquals(taskResponseDTO.id(), Long.valueOf(72));
         assertEquals(taskResponseDTO.name(), dto.name());
         assertEquals(taskResponseDTO.description(), dto.description());
         assertEquals(taskResponseDTO.project().id(), dto.projectId());

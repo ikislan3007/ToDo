@@ -3,7 +3,6 @@ package com.todo.todo.domain.task.entity;
 import com.todo.todo.domain.BaseEntity;
 import com.todo.todo.domain.project.entity.Project;
 import org.springframework.beans.factory.annotation.Value;
-
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -30,9 +29,6 @@ public class Task extends BaseEntity implements Serializable {
 
     @Value("${some.key:false}")
     private boolean done;
-
-
-
 
     public String getName() {
         return name;
