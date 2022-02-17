@@ -47,7 +47,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void delete(Long id) {
         if (projectRepository.existsById(id)) {
-            projectRepository.deleteById(id);
+           projectRepository.deleteById(id);
         } else {
             throw new ProjectNotFoundException(id);
         }
@@ -62,7 +62,6 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
     public void setProjectMapper(ProjectMapper projectMapper) {
-
         this.projectMapper = projectMapper;
     }
 }

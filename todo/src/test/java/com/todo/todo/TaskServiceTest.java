@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,36 +22,33 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class TaskServiceTest {
     @Autowired
-    private TaskService serviceTask;
-
+    private TaskService taskService;
     @MockBean
     private ProjectRepository projectRepository;
-
     @MockBean
     private TaskRepository taskRepository;
-
     private Project project;
     private Task task;
 
     @BeforeEach
     public void setUp() {
-        project = new Project(Long.valueOf(1), "Project");
+        project = new Project(Long.valueOf(72), "Project");
 
         task = new Task();
-        task.setId(Long.valueOf(1));
+        task.setId(Long.valueOf(73));
         task.setName("Task Name");
         task.setDescription("Task Description");
         task.setDone(false);
         task.setProject(this.project);
     }
-
     @Test
     @DisplayName("Test save task")
     void testSave() {
@@ -60,14 +58,13 @@ public class TaskServiceTest {
         doReturn(task).when(taskRepository).save(any());
         doReturn(projectOptional).when(projectRepository).findById(any());
 
-        TaskResponseDTO taskResponseDTO = serviceTask.save(dto);
+        TaskResponseDTO taskResponseDTO = taskService.save(dto);
         assertEquals(taskResponseDTO.id(), task.getId());
         assertEquals(taskResponseDTO.name(), task.getName());
         assertEquals(taskResponseDTO.description(), task.getDescription());
         assertEquals(taskResponseDTO.project().id(), task.getProject().getId());
 
     }
-
     @Test
     @DisplayName("Test update task")
     void testUpdate() {
@@ -84,7 +81,7 @@ public class TaskServiceTest {
 
         doReturn(task).when(taskRepository).save(any());
 
-        TaskResponseDTO taskResponseDTO = serviceTask.update(dto);
+        TaskResponseDTO taskResponseDTO = taskService.update(dto);
 
         assertEquals(taskResponseDTO.id(), dto.id());
         assertEquals(taskResponseDTO.name(), dto.name());
@@ -92,7 +89,6 @@ public class TaskServiceTest {
         assertEquals(taskResponseDTO.project().id(), dto.projectId());
 
     }
-
     @Test
     @DisplayName("Test get Task by Id")
     void testGetTask() {
@@ -107,11 +103,9 @@ public class TaskServiceTest {
 
         assertEquals(task.getId(), taskDtoResponse.id());
     }
-
-
     @Autowired
     public void setTaskService(TaskService taskService) {
-        this.serviceTask = taskService;
+        this.taskService = taskService;
     }
 
 
