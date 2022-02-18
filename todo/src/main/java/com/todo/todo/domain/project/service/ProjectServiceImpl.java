@@ -28,8 +28,8 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectResponseDTO get(Long id) {
-
-        return projectMapper.map(projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id)));
+        Project project=projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
+        return projectMapper.map(project);
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.todo.todo.domain.project.models.ProjectResponseDTO;
 import com.todo.todo.domain.project.repository.ProjectRepository;
 import com.todo.todo.domain.task.entity.Task;
 import com.todo.todo.domain.task.models.TaskCreateDTO;
+import com.todo.todo.domain.task.models.TaskProjectRecordResponse;
 import com.todo.todo.domain.task.models.TaskResponseDTO;
 import com.todo.todo.domain.task.models.TaskUpdateDTO;
 import com.todo.todo.domain.task.repository.TaskRepository;
@@ -15,6 +16,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,7 +34,7 @@ public class TaskServiceTest {
     private TaskRepository taskRepository;
     private Project project;
     private Task task;
-
+    TaskProjectRecordResponse taskProjectRecordResponse;
     @BeforeEach
     public void setUp() {
         project = new Project(Long.valueOf(72), "Project");
@@ -64,7 +68,7 @@ public class TaskServiceTest {
         TaskUpdateDTO dto = new TaskUpdateDTO(
                 "task",
                 "descriptionddqwd",
-                Long.valueOf(1),
+                Long.valueOf(72),
                 false
         );
 
@@ -75,7 +79,7 @@ public class TaskServiceTest {
 
         TaskResponseDTO taskResponseDTO = taskService.update(dto, Long.valueOf(72));
 
-        assertEquals(taskResponseDTO.id(), Long.valueOf(72));
+        assertEquals(taskResponseDTO.id(), Long.valueOf(73));
         assertEquals(taskResponseDTO.name(), dto.name());
         assertEquals(taskResponseDTO.description(), dto.description());
         assertEquals(taskResponseDTO.project().id(), dto.projectId());
@@ -84,21 +88,18 @@ public class TaskServiceTest {
     @Test
     @DisplayName("Test get Task by Id")
     void testGetTask() {
-
         Task task = new Task();
         task.setName("task1");
         task.setDescription("something");
         task.setId(22L);
-
-        ProjectResponseDTO responseDTOProject = new ProjectResponseDTO(22L, "project1");
+        List<TaskProjectRecordResponse> tasksList = new ArrayList<>();
+        ProjectResponseDTO responseDTOProject = new ProjectResponseDTO(22L, "project1", tasksList);
         TaskResponseDTO taskDtoResponse = new TaskResponseDTO(22L, "task1", "something", responseDTOProject, false);
-
         assertEquals(task.getId(), taskDtoResponse.id());
     }
     @Autowired
     public void setTaskService(TaskService taskService) {
         this.taskService = taskService;
     }
-
 
 }

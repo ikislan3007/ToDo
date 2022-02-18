@@ -1,4 +1,4 @@
-package com.todo.todo.domain.project.controller;
+package com.todo.todo.web;
 import com.todo.todo.domain.project.models.ProjectCreateDTO;
 import com.todo.todo.domain.project.models.ProjectResponseDTO;
 import com.todo.todo.domain.project.models.ProjectUpdateDTO;
@@ -19,10 +19,11 @@ public class ProjectController {
     }
     @GetMapping("/{id}")
     public ResponseEntity<ProjectResponseDTO> get(@PathVariable Long id) {
-        return ResponseEntity.ok(projectService.get(id));
+        ProjectResponseDTO projectResponseDTO=projectService.get(id);
+        return ResponseEntity.ok(projectResponseDTO);
     }
     @GetMapping
-    public ResponseEntity<Page<ProjectResponseDTO>> get(Pageable pageable) {
+    public ResponseEntity<Page<ProjectResponseDTO>> getAll(Pageable pageable) {
         return ResponseEntity.ok(projectService.getAll(pageable));
     }
     @PutMapping("/{id}")

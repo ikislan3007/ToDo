@@ -1,4 +1,4 @@
-package com.todo.todo.domain.task.controller;
+package com.todo.todo.web;
 
 import com.todo.todo.domain.task.models.TaskCreateDTO;
 import com.todo.todo.domain.task.models.TaskResponseDTO;
